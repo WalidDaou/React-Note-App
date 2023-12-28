@@ -13,13 +13,14 @@ interface NotesListProps {
   notes: NoteItem[];
   onEdit: (id: number, newText: string) => void;
   onDelete: (id: number) => void;
+  onEditCategoryPriority: (id: number, newCategory: string, newPriority: number) => void;
 }
 
-function NotesList({ notes, onEdit, onDelete }: NotesListProps) {
+function NotesList({ notes, onEdit, onDelete, onEditCategoryPriority }: NotesListProps) {
   const sortedNotes = [...notes].sort((a, b) => a.priority - b.priority);
 
   return (
-    <div className='note'>
+    <div className='NOte'>
       {sortedNotes.map((note) => (
         <Note
           key={note.id}
@@ -29,6 +30,9 @@ function NotesList({ notes, onEdit, onDelete }: NotesListProps) {
           category={note.category}
           onDelete={() => onDelete(note.id)}
           onEdit={(newText: string) => onEdit(note.id, newText)}
+          onEditCategoryPriority={(newCategory: string, newPriority: number) =>
+            onEditCategoryPriority(note.id, newCategory, newPriority)
+          }
         />
       ))}
     </div>

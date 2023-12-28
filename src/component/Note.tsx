@@ -1,5 +1,3 @@
-// Note.tsx
-
 import React, { useState } from 'react';
 import './Note.css';
 
@@ -10,6 +8,7 @@ interface NoteProps {
   category: string;
   onEdit: (newText: string) => void;
   onDelete: Function;
+  onEditCategoryPriority: (newCategory: string, newPriority: number) => void;
 }
 
 function Note({
@@ -19,10 +18,12 @@ function Note({
   category,
   onEdit,
   onDelete,
+  onEditCategoryPriority,
 }: NoteProps) {
   const [isEditing, setEditing] = useState(false);
-
   const [editedText, setEditedText] = useState(text);
+  const [editedCategory, setEditedCategory] = useState(category);
+  const [editedPriority, setEditedPriority] = useState(priority);
 
   const handleEditClick = () => {
     setEditing(true);
@@ -30,8 +31,10 @@ function Note({
 
   const handleSaveClick = () => {
     onEdit(editedText);
+    onEditCategoryPriority(editedCategory, editedPriority);
     setEditing(false);
   };
+
   const getBackgroundColor = () => {
     switch (category) {
       case 'home':
@@ -41,51 +44,103 @@ function Note({
       case 'work':
         return 'lightcoral';
       case 'fun':
-        return 'lightyellow';
+        return 'lightpink';
       default:
         return 'lightgray';
     }
   };
 
   return (
-
-
     <div style={{ backgroundColor: getBackgroundColor() }} className={`Note priority-${priority}`}>
       {isEditing ? (
         <>
-          <div className='noteText'>
+          <div className='noteText'> 
+            <div className='forEdit'>
             <textarea
               className='textare'
               value={editedText}
               onChange={(e) => setEditedText(e.target.value)}
               rows={4}
             />
+            <div className='pticat'>
+              <div className='PRIORITY'>
+                <label>
+                  Priority:
+                  <input
+                    type="radio"
+                    value={1}
+                    checked={editedPriority === 1}
+                    onChange={() => setEditedPriority(1)}
+                  />
+                  1
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value={2}
+                    checked={editedPriority === 2}
+                    onChange={() => setEditedPriority(2)}
+                  />
+                  2
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value={3}
+                    checked={editedPriority === 3}
+                    onChange={() => setEditedPriority(3)}
+                  />
+                  3
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value={4}
+                    checked={editedPriority === 4}
+                    onChange={() => setEditedPriority(4)}
+                  />
+                  4
+                </label></div>
+
+              <div className='CATEGORY'>
+                <label>Category:</label>
+                <select
+                  value={editedCategory}
+                  onChange={(e) => setEditedCategory(e.target.value)}
+                >
+                  <option value="home">Home</option>
+                  <option value="stuff">Stuff</option>
+                  <option value="hobby">Hobby</option>
+                  <option value="fun">Fun</option>
+                </select>
+              </div>
+            </div></div>
             <button onClick={handleSaveClick} className='save'>
               Save
             </button>
           </div>
-        </>
-      ) : (
-        <>
-          <div className='noteED'>
-            <div className='stuff'>
-              <p className='text'>{text}</p>
-              <p>Priority: {priority}</p>
-              <p>Category: {category}</p>
-            </div>
-            <div className='ED'>
-              <button onClick={handleEditClick} className='Edit'>
-                Edit
-              </button>
-              <button onClick={() => onDelete(id)} className='Delete'>
-                Delete
-              </button>
-            </div>
-          
-          </div>
-        </>
-      )}
-    </div>
+    </>
+  ) : (
+    <>
+      <div className='noteED'>
+        <div className='stuff'>
+          <p className='text'>{text}</p>
+          <p>Priority: {priority}</p>
+          <p>Category: {category}</p>
+        </div>
+        <div className='ED'>
+          <button onClick={handleEditClick} className='Edit'>
+            Edit
+          </button>
+          <button onClick={() => onDelete(id)} className='Delete'>
+            Delete
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}
+    </div >
   );
 }
 
